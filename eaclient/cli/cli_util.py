@@ -1,4 +1,5 @@
 from functools import wraps
+from typing import Optional
 
 from eaclient import (
     event_logger,
@@ -7,6 +8,8 @@ from eaclient import (
     util,
 )
 
+from eaclient.apt import AptProxyScope, setup_apt_proxy
+from eaclient.config import EAConfig
 from eaclient.files import machine_token
 
 event = event_logger.get_event_logger()
@@ -94,5 +97,28 @@ def assert_not_attached(f):
                 account_name = machine_token_file.contract_id
             )
         return f(args, cfg=cfg, **kwargs)
-
     return new_f
+
+
+def configure_apt_proxy(
+    cfg: EAConfig,
+    scope: AptProxyScope,
+    set_key: str,
+    set_value: Optional[str],
+) -> None:
+    """
+    Handles setting part the apt proxies - global and uaclient scoped proxies
+    """
+    if scope == AptProxyScope.GLOBAL:
+        http_proxy = cfg.global_apt_http_proxy
+        https_proxy = cfg.global_apt_https_proxy
+    elif scope == AptProxyScope.EACLIENT:
+        http_proxy = cfg.ea_apt_http_proxy
+        https_proxy = cfg.ea_apt_https_proxy
+    if "https" in set_key:
+        https_proxy = set_value
+    else:
+        http_proxy = set_value
+    setup_apt_proxy(
+        http_proxy=http_proxy, https_proxy=https_proxy, proxy_scope=scope
+    )

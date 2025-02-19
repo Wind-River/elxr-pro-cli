@@ -6,6 +6,7 @@ from eaclient import (
     messages,
 )
 
+from eaclient.apt import AptProxyScope
 from eaclient.cli import cli_util
 from eaclient.cli.commands import ProArgument, ProArgumentGroup, ProCommand
 from eaclient.cli.parser import HelpCategory
@@ -101,6 +102,9 @@ def action_config_set(args, *, cfg, **kwargs):
                     current_proxy="pro scoped apt", previous_proxy="global apt"
                 )
             )
+        cli_util.configure_apt_proxy(
+            cfg, AptProxyScope.EACLIENT, set_key, set_value
+        )
         cfg.global_apt_http_proxy = None
         cfg.global_apt_https_proxy = None
     elif set_key in cfg.global_scoped_proxy_options:
@@ -111,6 +115,9 @@ def action_config_set(args, *, cfg, **kwargs):
                     current_proxy="global apt", previous_proxy="pro scoped apt"
                 )
             )
+        cli_util.configure_apt_proxy(
+            cfg, AptProxyScope.GLOBAL, set_key, set_value
+        )
         cfg.ea_apt_http_proxy = None
         cfg.ea_apt_https_proxy = None
 
@@ -130,6 +137,14 @@ def action_config_unset(args, *, cfg, **kwargs):
         parser.print_help_for_command("config unset")
         raise exceptions.InvalidArgChoice(
             arg="<key>", choices=", ".join(config.EA_CONFIGURABLE_KEYS)
+        )
+    if args.key in cfg.ea_scoped_proxy_options:
+        cli_util.configure_apt_proxy(
+            cfg, AptProxyScope.EACLIENT, args.key, None
+        )
+    elif args.key in cfg.global_scoped_proxy_options:
+        cli_util.configure_apt_proxy(
+            cfg, AptProxyScope.GLOBAL, args.key, None
         )
 
     setattr(cfg, args.key, None)
