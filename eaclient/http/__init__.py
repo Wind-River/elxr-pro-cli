@@ -36,6 +36,14 @@ HTTPResponse = NamedTuple(
 )
 
 
+def is_https_url(url: str) -> bool:
+    try:
+        parsed_url = urlparse(url)
+        return parsed_url.scheme == 'https'
+    except ValueError:
+        return False
+
+
 def is_service_url(url: str) -> bool:
     try:
         parsed_url = urlparse(url)

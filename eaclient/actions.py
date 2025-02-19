@@ -15,6 +15,7 @@ from eaclient import (
 )
 
 from eaclient.files import machine_token, state_files
+from eaclient.http import is_https_url
 
 from eaclient.files.state_files import (
     AttachmentData,
@@ -124,13 +125,16 @@ def enable_entitlements(
         repo_suites = ent.get("suites")
         components = ent.get("components")
 
-        apt.add_auth_apt_repo(
-            repo_file_tmpl.format(name=entitlement_name),
-            repo_url,
-            id_token,
-            repo_suites,
-            components,
-            repo_key_file
-        )
+        if is_https_url(repo_url):
+            apt.add_auth_apt_repo(
+                repo_file_tmpl.format(name=entitlement_name),
+                repo_url,
+                id_token,
+                repo_suites,
+                components,
+                repo_key_file
+            )
+        else:
+            raise exceptions.InvalidHttpsUrl(repo_url)
 
     event.info(messages.APT_ADD_REPOSITORY_SOURCE_SUCCESS)
