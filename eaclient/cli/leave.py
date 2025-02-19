@@ -1,15 +1,20 @@
+import logging
+import sys
+
 from eaclient import (
+    actions,
     config,
     event_logger,
+    exceptions,
     messages,
     util,
 )
 from eaclient.cli import cli_util
 from eaclient.cli.commands import ProArgument, ProArgumentGroup, ProCommand
 from eaclient.cli.parser import HelpCategory
-from eaclient.files import machine_token, state_files
 
 event = event_logger.get_event_logger()
+LOG = logging.getLogger(util.replace_top_level_logger_name(__name__))
 
 
 @cli_util.verify_json_format_args
@@ -40,9 +45,20 @@ def _detach(cfg: config.EAConfig, assume_yes: bool) -> int:
     if not util.prompt_for_confirmation(assume_yes=assume_yes):
         return 1
 
-    machine_token_file = machine_token.get_machine_token_file(cfg)
-    machine_token_file.delete()
-    state_files.delete_state_files()
+    try:
+        actions.action_to_request(cfg, cmd="leave")
+    except exceptions.ConnectivityError as exc:
+        LOG.exception(
+            "Failed to access URL: %s", exc.url, exc_info=exc
+        )
+        msg = messages.E_CONNECTIVITY_ERROR.format(
+            url=exc.url,
+            cause_error=exc.cause_error,
+        )
+        event.error(error_msg=msg.msg, error_code=msg.name)
+        event.info(info_msg=msg.msg, file_type=sys.stderr)
+        sys.exit(1)
+
     event.info(messages.DETACH_SUCCESS)
     return 0
 

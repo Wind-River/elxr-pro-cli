@@ -1,8 +1,10 @@
 import argparse
 import logging
+import sys
 
 from eaclient import (
     actions,
+    defaults,
     event_logger,
     exceptions,
     messages,
@@ -43,12 +45,27 @@ def action_attach(args, *, cfg, **kwargs):
         token = attach_config.token
 
     try:
-        actions.attach_with_token(cfg, token=token)
-    except exceptions.ConnectivityError:
-        raise exceptions.AttachError()
+        actions.action_to_request(cfg, cmd="join", token=token)
+    except exceptions.ConnectivityError as exc:
+        LOG.exception(
+            "Failed to access URL: %s", exc.url, exc_info=exc
+        )
+        msg = messages.E_CONNECTIVITY_ERROR.format(
+            url=exc.url,
+            cause_error=exc.cause_error,
+        )
+        event.error(error_msg=msg.msg, error_code=msg.name)
+        event.info(info_msg=msg.msg, file_type=sys.stderr)
+        sys.exit(1)
     else:
         ret = 0
         '''do some post actions here.'''
+        event.process_events()
+        event.info(
+            messages.PROMPT_MOTD_JOIN.format(
+                homepage_url=defaults.HOMEPAGE_URL
+            )
+        )
         return ret
 
 
