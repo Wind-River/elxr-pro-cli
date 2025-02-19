@@ -1,0 +1,3 @@
+---
+include:
+  - https://gitlab.com/elxr/ci/pipeline/raw/elxr/recipes/elxr.yml

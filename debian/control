@@ -1,0 +1,37 @@
+Source: elxr-pro
+Section: misc
+Priority: important
+Maintainer: eLxr Developers <elxr-pro-core-dev@windriver.com>
+Build-Depends: debhelper-compat (= 13),
+               debhelper,
+               dh-python,
+               bash-completion,
+               gettext,
+               git,
+               libapt-pkg-dev,
+               python3-apt,
+               libjson-c-dev,
+               libboost-test-dev,
+               python3 (>= 3.4),
+               python3-flake8,
+               python3-jinja2,
+               python3-mock,
+               python3-pytest,
+               python3-setuptools,
+               python3-yaml
+Standards-Version: 4.6.2
+Homepage: https://elxr.org/pro
+
+Package: elxr-pro
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         ${python3:Depends},
+         ${extra:Depends},
+         python3-apt,
+         python3-pkg-resources,
+Architecture: all
+Priority: optional
+Description: Management tools for eLxr Pro
+ eLxr Pro is a suite of additional services provided by WindRiver on top of
+ eLxr. The eLxr Pro Client (elxr-pro) is the command-line tool that will help
+ you manage the components you need. 
