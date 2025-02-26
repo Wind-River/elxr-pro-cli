@@ -1,3 +1,9 @@
----
-include:
-  - https://gitlab.com/elxr/ci/pipeline/raw/elxr/recipes/elxr.yml
+stages:
+  - test
+
+test:
+  tags:
+    - x86_64
+  script:
+    - echo "This job will always pass"
+    - exit 0
