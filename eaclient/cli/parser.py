@@ -87,10 +87,21 @@ class ProArgumentParser(argparse.ArgumentParser):
             help_output += "\n"
             help_output += "{}:".format(category.header)
             help_output += "\n"
+
+            seen = set()
+            unique_items = []
+            # Ensuring uniqueness based on `item.name`
             for item in sorted(items, key=lambda item: item.position):
+                if item.name not in seen:
+                    seen.add(item.name)
+                    unique_items.append(item)
+
+            # Formatting the help output
+            for item in unique_items:
                 help_output += "\n"
                 help_output += "  {:<17}{}".format(item.name, item.help_string)
             help_output += "\n"
+
         if self.epilog:
             help_output += "\n"
             help_output += self.epilog
