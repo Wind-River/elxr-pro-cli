@@ -37,7 +37,7 @@ LOG = logging.getLogger(util.replace_top_level_logger_name(__name__))
 
 @cli_util.assert_not_attached
 @cli_util.assert_root
-@cli_util.assert_lock_file("pro join")
+@cli_util.assert_lock_file("elxr-pro join")
 def action_attach(args, *, cfg, **kwargs):
     if args.token and args.attach_config:
         raise exceptions.CLIAttachTokenArgXORConfig()

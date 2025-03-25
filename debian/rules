@@ -9,11 +9,17 @@ override_dh_auto_build:
 
 override_dh_auto_test:
 	python3 -m flake8 eaclient
+	pytest --cov=eaclient --cov-report=html
+	mkdir -p build/htmlcov
+	cp -r htmlcov/* build/htmlcov/
 
 override_dh_auto_install:
+	mkdir -p debian/elxr-pro/usr/share/doc/elxr-pro/coverage
+	cp -r build/htmlcov/* debian/elxr-pro/usr/share/doc/elxr-pro/coverage/
 	dh_auto_install --destdir=debian/elxr-pro
 
 override_dh_auto_clean:
 	dh_auto_clean
 	make clean
+	rm build -rf
 

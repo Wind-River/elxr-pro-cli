@@ -315,6 +315,11 @@ class NonSupportCommandError(ELxrProError):
 
     msg = messages.E_NONSUPPORT_CMD
 
+
+class UnknownProcessorType(ELxrProError):
+    _formatted_msg = messages.E_UNKNOWN_PROCESSOR_TYPE
+
+
 ###############################################################################
 #                              FILES/FORMATS                                  #
 ###############################################################################

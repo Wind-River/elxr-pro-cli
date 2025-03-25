@@ -5,6 +5,7 @@ clean:
 	rm -rf *.egg-info/ .tox/ .cache/ .mypy_cache/
 	rm -rf docs/build/
 	rm -rf .pybuild
+	rm -rf htmlcov
 	find . -type f -name '*.pyc' -delete
 	find . -type d -name '*__pycache__' -delete
 

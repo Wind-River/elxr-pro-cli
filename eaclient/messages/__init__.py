@@ -626,6 +626,20 @@ E_INVALID_URL = FormattedNamedMessage(
 E_MACHINEID_UNMATCH = FormattedNamedMessage(
     "machineid unmatch",
     t.gettext(
-        "MachineId Unmatch: {request_machineid} and {response_machined}"
+        "MachineId Unmatch: {request_machineid} and {response_machineid}"
     ),
+)
+
+UNEXPECTED_ERROR = FormattedNamedMessage(
+    "unexpected-error",
+    t.gettext(
+        """\
+An unexpected error occurred: {error_msg}
+For more details, see the log: {log_path}"""
+    ),
+)
+
+E_UNKNOWN_PROCESSOR_TYPE = FormattedNamedMessage(
+    "unknown-processor-type",
+    t.gettext("Unknown processor type: {processor_type}"),
 )

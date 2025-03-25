@@ -112,7 +112,7 @@ def action_to_request(
             resp_machineid = response_json.get("machineId", "")
             if resp_machineid != machine_id:
                 raise exceptions.MachineIdUnmatchError(
-                    reqeust_machineid=machine_id,
+                    request_machineid=machine_id,
                     response_machineid=resp_machineid,
                 )
     else:
@@ -133,8 +133,8 @@ def enable_entitlements(
     for ent in entitlements:
         entitlement_name = ent.get("type")
         repo_url = ent.get("uri")
-        login = ent.get("login")
-        password = ent.get("password")
+        login = ent.get("login") or ""
+        password = ent.get("password") or ""
         id_token = login + ":" + password
         repo_suites = ent.get("suites")
         components = ent.get("components")

@@ -34,6 +34,7 @@ from eaclient.cli.leave import leave_command
 from eaclient.cli.parser import HelpCategory, ProArgumentParser
 from eaclient.cli.validate import test_command
 from eaclient.config import EAConfig
+from eaclient.log import get_user_or_root_log_file_path
 
 event = event_logger.get_event_logger()
 LOG = logging.getLogger(util.replace_top_level_logger_name(__name__))
@@ -138,7 +139,19 @@ def main_error_handler(func):
             sys.exit(exc.exit_code)
         except Exception as e:
             LOG.exception("Unhandled exception, please file a bug")
-            sys.exit(str(e))
+            event.info(
+                info_msg=messages.UNEXPECTED_ERROR.format(
+                    error_msg=str(e),
+                    log_path=get_user_or_root_log_file_path(),
+                ).msg,
+                file_type=sys.stderr,
+            )
+            event.error(
+                error_msg=getattr(e, "msg", str(e)), error_type="exception"
+            )
+
+            event.process_events()
+            sys.exit(1)
 
     return wrapper
 

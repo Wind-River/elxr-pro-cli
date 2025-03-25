@@ -462,7 +462,9 @@ def get_apt_auth_file_from_apt_config():
         ["apt-config", "shell", "key", APT_CONFIG_AUTH_PARTS_DIR]
     )
     if out:  # then auth.conf.d parts is present
-        return out.split("'")[1] + "90elxr-pro-advantage"
+        match = re.search(r"'([^']+)'", out)
+        if match:
+            return out.split("'")[1] + "90elxr-pro-advantage"
     else:  # then use configured /etc/apt/auth.conf
         out, _err = system.subp(
             ["apt-config", "shell", "key", APT_CONFIG_AUTH_FILE]
