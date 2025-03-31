@@ -78,6 +78,7 @@ ReleaseInfo = NamedTuple(
         ("distribution", str),
         ("release", str),
         ("series", str),
+        ("variant", str),
     ],
 )
 
@@ -255,11 +256,13 @@ def get_release_info() -> ReleaseInfo:
     distribution = os_release.get("NAME", "UNKNOWN")
     series = os_release.get("VERSION_CODENAME", "")
     release = os_release.get("VERSION_ID", "")
+    variant = os_release.get("VARIANT_ID", "")
 
     return ReleaseInfo(
         distribution=distribution,
         release=release,
         series=series.lower(),
+        variant=variant,
     )
 
 

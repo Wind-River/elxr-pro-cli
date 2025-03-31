@@ -434,11 +434,13 @@ class TestGetReleaseInfo:
                     "NAME": "eLxr",
                     "VERSION_ID": "12",
                     "VERSION_CODENAME": "aria",
+                    "VARIANT_ID": "server"
                 },
                 system.ReleaseInfo(
                     distribution="eLxr",
                     release="12",
                     series="aria",
+                    variant="server"
                 ),
             ),
         ],
