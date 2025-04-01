@@ -59,7 +59,9 @@ def action_attach(args, *, cfg, **kwargs):
         token = attach_config.token
 
     try:
-        actions.action_to_request(cfg, cmd="join", token=token)
+        actions.action_to_request(
+            cfg, cmd="join", token=token, pro_only_enable=args.pro_only
+        )
     except exceptions.ConnectivityError as exc:
         LOG.exception(
             "Failed to access URL: %s", exc.url, exc_info=exc
@@ -101,6 +103,11 @@ join_command = ProCommand(
                     "--attach-config",
                     help=messages.CLI_ATTACH_ATTACH_CONFIG,
                     type=argparse.FileType("r"),
+                ),
+                ProArgument(
+                    "--pro-only",
+                    help=messages.CLI_PRO_ONLY,
+                    action="store_true",
                 ),
                 ProArgument(
                     "--format",

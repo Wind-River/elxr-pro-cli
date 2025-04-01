@@ -45,6 +45,7 @@ def action_to_request(
     cfg: config.EAConfig,
     cmd: str,
     token: str = None,
+    pro_only_enable: bool = False,
     silent: bool = False,
 ) -> None:
     """
@@ -94,6 +95,8 @@ def action_to_request(
         system.get_machine_id.cache_clear()
         machine_id_file.write(machine_id)
         attachment_data_file.write(AttachmentData(attached_at=attached_at))
+        if pro_only_enable:
+            apt.remove_elxr_and_debian_repo()
     elif cmd == 'leave':
         resp_msg = response_json.get("message")
         if resp_msg == "Leave successful":
@@ -107,6 +110,7 @@ def action_to_request(
 
             machine_token_file.delete()
             state_files.delete_state_files()
+            apt.restore_elxr_and_debian_repo()
     elif cmd == 'test':
         if token:
             resp_machineid = response_json.get("machineId", "")

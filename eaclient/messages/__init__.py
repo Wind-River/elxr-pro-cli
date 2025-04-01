@@ -246,6 +246,9 @@ CLI_ATTACH_ATTACH_CONFIG = t.gettext(
     "use the provided attach config file instead of passing the token on the "
     "cli"
 )
+CLI_PRO_ONLY = t.gettext(
+    "drop the original apt repo sources(elxr|debian), just access pro only."
+)
 
 
 ###############################################################################
@@ -642,4 +645,14 @@ For more details, see the log: {log_path}"""
 E_UNKNOWN_PROCESSOR_TYPE = FormattedNamedMessage(
     "unknown-processor-type",
     t.gettext("Unknown processor type: {processor_type}"),
+)
+
+E_ARCH_NOT_SUPPORTED = FormattedNamedMessage(
+    "arch-not-supported",
+    t.gettext("{arch} is not supported for {variant}"),
+)
+
+E_VARIANT_UNEXPECTED_ERROR = FormattedNamedMessage(
+    "variant-unexpected",
+    t.gettext("{variant} is unexpected, just 'server' and 'edge' are valid"),
 )

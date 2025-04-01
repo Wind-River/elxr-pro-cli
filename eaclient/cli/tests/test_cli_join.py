@@ -205,13 +205,15 @@ class TestActionAttach:
         self, mock_action_to_request, FakeConfig
     ):
         """Test successful attachment when a valid token is provided"""
-        args = mock.MagicMock(token="valid-token", attach_config=None)
+        args = mock.MagicMock(
+            token="valid-token", attach_config=None, pro_only=True
+        )
         cfg = FakeConfig()
 
         ret = join_command.action(args, cfg=cfg)
 
         mock_action_to_request.assert_called_once_with(
-            cfg, cmd="join", token="valid-token"
+            cfg, cmd="join", token="valid-token", pro_only_enable=True,
         )
         assert ret == 0
 
@@ -223,7 +225,9 @@ class TestActionAttach:
         """Test successful attachment when attach_config is provided"""
         fake_config_content = '{"token": "config-token"}'
         args = mock.MagicMock(
-            token=None, attach_config=FakeFile(fake_config_content)
+            token=None,
+            attach_config=FakeFile(fake_config_content),
+            pro_only=False,
         )
         cfg = FakeConfig()
 
@@ -237,7 +241,7 @@ class TestActionAttach:
             ret = join_command.action(args, cfg=cfg)
 
         mock_action_to_request.assert_called_once_with(
-            cfg, cmd="join", token="config-token"
+            cfg, cmd="join", token="config-token", pro_only_enable=False,
         )
         assert ret == 0
 

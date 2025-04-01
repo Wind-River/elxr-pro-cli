@@ -40,6 +40,9 @@ from eaclient.apt import (
     assert_valid_apt_credentials,
     remove_auth_apt_repo,
     remove_repo_from_apt_auth_file,
+    get_default_repo_file,
+    remove_elxr_and_debian_repo,
+    restore_elxr_and_debian_repo,
     setup_apt_proxy,
 )
 
@@ -807,6 +810,163 @@ class TestRemoveRepoFromAptAuthFile:
         assert 0 == m_ensure_file_absent.call_count
         assert 0o600 == stat.S_IMODE(os.lstat(auth_file.strpath).st_mode)
         assert after_content == auth_file.read("rb")
+
+
+class TestGetDefaultRepoFile:
+    """Unit tests for get_default_repo_file function"""
+
+    @pytest.mark.parametrize(
+        "arch, variant, expected_elxr, expected_debian",
+        [
+            ("x86_64", "edge",
+             "sources.list.d/tiler.list", "sources.list"),
+            ("aarch64", "edge",
+             "sources.list.d/0000elxr.list", "sources.list.d/0000elxr.list"),
+            ("x86_64", "server",
+             "sources.list", "sources.list"),
+        ],
+    )
+    @mock.patch("eaclient.system.get_kernel_info")
+    @mock.patch("eaclient.system.get_release_info")
+    def test_get_default_repo_file_valid(
+        self, mock_get_release_info, mock_get_kernel_info,
+        arch, variant, expected_elxr, expected_debian
+    ):
+        """Test valid arch and variant cases"""
+        mock_get_kernel_info.return_value.uname_machine_arch = arch
+        mock_get_release_info.return_value.variant = variant
+
+        elxr_rf, debian_rf = get_default_repo_file()
+
+        assert elxr_rf == expected_elxr
+        assert debian_rf == expected_debian
+
+    @pytest.mark.parametrize("arch, variant", [
+        ("armv7l", "edge"),
+        ("riscv64", "server"),
+    ])
+    @mock.patch("eaclient.system.get_kernel_info")
+    @mock.patch("eaclient.system.get_release_info")
+    def test_get_default_repo_file_invalid_arch(
+        self, mock_get_release_info, mock_get_kernel_info, arch, variant
+    ):
+        """Test unsupported architectures"""
+        mock_get_kernel_info.return_value.uname_machine_arch = arch
+        mock_get_release_info.return_value.variant = variant
+
+        with pytest.raises(exceptions.ArchNotSupported) as exc_info:
+            get_default_repo_file()
+
+        assert exc_info.value.additional_info["arch"] == arch
+        assert exc_info.value.additional_info["variant"] == variant
+
+    @pytest.mark.parametrize("variant", ["desktop", "iot"])
+    @mock.patch("eaclient.system.get_kernel_info")
+    @mock.patch("eaclient.system.get_release_info")
+    def test_get_default_repo_file_invalid_variant(
+        self, mock_get_release_info, mock_get_kernel_info, variant
+    ):
+        """Test unexpected variants"""
+        mock_get_kernel_info.return_value.uname_machine_arch = "x86_64"
+        mock_get_release_info.return_value.variant = variant
+
+        with pytest.raises(exceptions.VariantUnexpectedError) as exc_info:
+            get_default_repo_file()
+
+        assert exc_info.value.additional_info["variant"] == variant
+
+
+@mock.patch("eaclient.apt.get_default_repo_file")
+@mock.patch("os.makedirs")
+@mock.patch("shutil.copy")
+@mock.patch("os.chmod")
+@mock.patch("eaclient.system.ensure_file_absent")
+@mock.patch("os.path.exists")
+def test_remove_elxr_and_debian_repo(
+    mock_exists, mock_ensure_absent, mock_chmod,
+    mock_copy, mock_makedirs, mock_get_default_repo_file
+):
+    """Test remove_elxr_and_debian_repo function"""
+
+    # Mock the return values of get_default_repo_file
+    mock_get_default_repo_file.return_value = (
+        "sources.list", "sources.list.d/debian.list"
+    )
+
+    # Simulate that the files exist
+    mock_exists.side_effect = lambda path: path in [
+        "/etc/apt/sources.list",
+        "/etc/apt/sources.list.d/debian.list"
+    ]
+
+    # Call the function
+    remove_elxr_and_debian_repo()
+
+    # Verify directory creation
+    mock_makedirs.assert_called_once_with(
+        os.path.join("/var/lib/elxr-pro/apt-esm", "etc/apt/sources.list.d"),
+        exist_ok=True
+    )
+
+    # Verify files were copied
+    mock_copy.assert_any_call(
+        "/etc/apt/sources.list",
+        "/var/lib/elxr-pro/apt-esm/etc/apt/sources.list"
+    )
+    mock_copy.assert_any_call(
+        "/etc/apt/sources.list.d/debian.list",
+        "/var/lib/elxr-pro/apt-esm/etc/apt/sources.list.d/debian.list"
+    )
+
+    # Verify file permissions were updated
+    mock_chmod.assert_any_call(
+        "/var/lib/elxr-pro/apt-esm/etc/apt/sources.list", 0o644
+    )
+    mock_chmod.assert_any_call(
+        "/var/lib/elxr-pro/apt-esm/etc/apt/sources.list.d/debian.list", 0o644
+    )
+
+    # Ensure the original files were removed
+    mock_ensure_absent.assert_any_call("/etc/apt/sources.list")
+    mock_ensure_absent.assert_any_call("/etc/apt/sources.list.d/debian.list")
+
+
+@mock.patch("eaclient.apt.get_default_repo_file")
+@mock.patch("shutil.copy")
+@mock.patch("os.chmod")
+@mock.patch("os.path.exists")
+def test_restore_elxr_and_debian_repo(
+    mock_exists, mock_chmod, mock_copy, mock_get_default_repo_file
+):
+    """Test restore_elxr_and_debian_repo function"""
+
+    # Mock the return values of get_default_repo_file
+    mock_get_default_repo_file.return_value = (
+        "sources.list", "sources.list.d/debian.list"
+    )
+
+    # Simulate that the backup files exist
+    mock_exists.side_effect = lambda path: path in [
+        "/var/lib/elxr-pro/apt-esm/etc/apt/sources.list",
+        "/var/lib/elxr-pro/apt-esm/etc/apt/sources.list.d/debian.list"
+    ]
+
+    # Call the function
+    restore_elxr_and_debian_repo()
+
+    # Verify files were restored
+    mock_copy.assert_any_call(
+        "/var/lib/elxr-pro/apt-esm/etc/apt/sources.list",
+        "/etc/apt/sources.list",
+    )
+    mock_copy.assert_any_call(
+        "/var/lib/elxr-pro/apt-esm/etc/apt/sources.list.d/debian.list",
+        "/etc/apt/sources.list.d/debian.list",
+    )
+
+    # Verify file permissions were updated
+    mock_chmod.assert_any_call("/etc/apt/sources.list", 0o644)
+    mock_chmod.assert_any_call("/etc/apt/sources.list.d/debian.list", 0o644)
 
 
 class TestAptProxyConfig:

@@ -320,6 +320,14 @@ class UnknownProcessorType(ELxrProError):
     _formatted_msg = messages.E_UNKNOWN_PROCESSOR_TYPE
 
 
+class ArchNotSupported(ELxrProError):
+    _formatted_msg = messages.E_ARCH_NOT_SUPPORTED
+
+
+class VariantUnexpectedError(ELxrProError):
+    _formatted_msg = messages.E_VARIANT_UNEXPECTED_ERROR
+
+
 ###############################################################################
 #                              FILES/FORMATS                                  #
 ###############################################################################

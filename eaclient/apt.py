@@ -16,6 +16,7 @@ import enum
 import logging
 import os
 import re
+import shutil
 import subprocess
 import tempfile
 from functools import wraps
@@ -470,6 +471,61 @@ def get_apt_auth_file_from_apt_config():
             ["apt-config", "shell", "key", APT_CONFIG_AUTH_FILE]
         )
         return out.split("'")[1].rstrip("/")
+
+
+def get_default_repo_file():
+    """Return the default original apt repo file"""
+    elxr_repo_file = "sources.list"
+    debian_repo_file = elxr_repo_file
+    arch = system.get_kernel_info().uname_machine_arch
+    variant = system.get_release_info().variant
+
+    if variant == "edge":
+        if arch == "x86_64":
+            elxr_repo_file = "sources.list.d/tiler.list"
+            debian_repo_file = "sources.list"
+        elif arch == "aarch64":
+            elxr_repo_file = "sources.list.d/0000elxr.list"
+            debian_repo_file = elxr_repo_file
+        else:
+            raise exceptions.ArchNotSupported(variant=variant, arch=arch)
+    elif variant == "server":
+        if arch != "x86_64":
+            raise exceptions.ArchNotSupported(variant=variant, arch=arch)
+    else:
+        raise exceptions.VariantUnexpectedError(variant=variant)
+
+    return elxr_repo_file, debian_repo_file
+
+
+def remove_elxr_and_debian_repo():
+    """Drop the default oringinal eLxr and debian apt sources."""
+    repo_dir = os.path.join(ESM_APT_ROOTDIR, "etc/apt")
+    repo_deb822 = os.path.join(repo_dir, "sources.list.d")
+    os.makedirs(repo_deb822, exist_ok=True)
+
+    elxr_rf, debian_rf = get_default_repo_file()
+    for repo_file in (elxr_rf, debian_rf):
+        rf = os.path.join("/etc/apt", repo_file)
+        if os.path.exists(rf):
+            dest_file = os.path.join(repo_dir, repo_file)
+            LOG.debug("Drop the default repo file %s", rf)
+            shutil.copy(rf, dest_file)
+            os.chmod(dest_file, 0o644)
+            system.ensure_file_absent(rf)
+
+
+def restore_elxr_and_debian_repo():
+    """Restore the default oringinal eLxr and debian apt sources."""
+    repo_dir = os.path.join(ESM_APT_ROOTDIR, "etc/apt")
+    elxr_rf, debian_rf = get_default_repo_file()
+    for repo_file in (elxr_rf, debian_rf):
+        rf = os.path.join(repo_dir, repo_file)
+        if os.path.exists(rf):
+            dest_file = os.path.join("/etc/apt", repo_file)
+            LOG.debug("Restore the default repo file %s", dest_file)
+            shutil.copy(rf, dest_file)
+            os.chmod(dest_file, 0o644)
 
 
 def setup_apt_proxy(
