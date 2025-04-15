@@ -176,12 +176,14 @@ class TestActionDetach:
 
         assert 0 == ret
 
+    @mock.patch("eaclient.system.write_file")
     @mock.patch("eaclient.lock.check_lock_info", return_value=(-1, ""))
     @mock.patch("eaclient.actions.action_to_request")
     def test_leave_fails_on_connectivity_error(
         self,
         mock_action_to_request,
-        m_prompt,
+        mock_check_lock_info,
+        mock_write_file,
         FakeConfig,
         fake_machine_token_file,
     ):

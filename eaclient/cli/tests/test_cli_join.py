@@ -199,10 +199,15 @@ class TestActionAttach:
         assert e.value.msg == \
             messages.E_ATTACH_TOKEN_ARG_OR_CONFIG_REQUIRED.msg
 
+    @mock.patch("eaclient.system.write_file")
     @mock.patch("eaclient.lock.check_lock_info", return_value=(-1, ""))
     @mock.patch("eaclient.actions.action_to_request")
     def test_attach_with_token_success(
-        self, mock_action_to_request, FakeConfig
+        self,
+        mock_action_to_request,
+        mock_check_lock_info,
+        mock_write_file,
+        FakeConfig
     ):
         """Test successful attachment when a valid token is provided"""
         args = mock.MagicMock(
@@ -217,10 +222,11 @@ class TestActionAttach:
         )
         assert ret == 0
 
+    @mock.patch("eaclient.system.write_file")
     @mock.patch("eaclient.lock.check_lock_info", return_value=(-1, ""))
     @mock.patch("eaclient.actions.action_to_request")
     def test_attach_with_attach_config_success(
-        self, mock_action_to_request, FakeConfig
+        self, mock_action_to_request, mock_write_file, FakeConfig
     ):
         """Test successful attachment when attach_config is provided"""
         fake_config_content = '{"token": "config-token"}'
@@ -245,10 +251,11 @@ class TestActionAttach:
         )
         assert ret == 0
 
+    @mock.patch("eaclient.system.write_file")
     @mock.patch("eaclient.lock.check_lock_info", return_value=(-1, ""))
     @mock.patch("eaclient.actions.action_to_request")
     def test_attach_fails_on_connectivity_error(
-        self, mock_action_to_request, FakeConfig
+        self, mock_action_to_request, mock_write_file, FakeConfig
     ):
         """Test failure due to network connectivity error"""
         cause = Exception("Simulated connectivity issue")

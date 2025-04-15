@@ -80,6 +80,8 @@ class TestActionToRequest:
         m_machine_id_write.assert_called_once_with(machine_id)
         m_attach_write.assert_called_once()
 
+    @mock.patch("eaclient.system.get_kernel_info")
+    @mock.patch("eaclient.system.get_release_info")
     @mock.patch("eaclient.system.get_machine_id")
     @mock.patch("eaclient.files.machine_token.get_machine_token_file")
     @mock.patch("eaclient.contract.EAContractClient")
@@ -89,8 +91,13 @@ class TestActionToRequest:
         m_add_secret,
         m_contract_client,
         m_get_machine_token,
-        m_get_machine_id
+        m_get_machine_id,
+        m_get_release_info,
+        m_get_kernel_info
     ):
+        m_get_release_info.return_value.variant = "server"
+        m_get_kernel_info.return_value.uname_machine_arch = "x86_64"
+
         cfg = mock.MagicMock()
         machine_id = "test-machine-id"
         contract_client = mock.MagicMock()
