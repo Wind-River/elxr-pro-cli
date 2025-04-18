@@ -243,8 +243,8 @@ The exit code will be:
 
 CLI_ATTACH_TOKEN = t.gettext("token obtained for eLxr Pro authentication")
 CLI_ATTACH_ATTACH_CONFIG = t.gettext(
-    "use the provided attach config file instead of passing the token on the "
-    "cli"
+    "use the provided attach config file instead of passing the token on"
+    "the cli, and the format should be like 'token: abcdefg123456789'"
 )
 CLI_PRO_ONLY = t.gettext(
     "drop the original apt repo sources(elxr|debian), just access pro only."

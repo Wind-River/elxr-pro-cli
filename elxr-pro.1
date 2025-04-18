@@ -1,0 +1,139 @@
+.TH "ELXR-PRO" "1" "18 April 2025" "Wind River Systems, Inc." "eLxr Pro"
+
+
+.SH NAME
+elxr-pro \- Manage eLxr Pro entitlements from Wind River
+
+
+.SH SYNOPSIS
+.BR "elxr-pro" " [-h] [--debug] [--version] <command> ..."
+
+
+.SH DESCRIPTION
+eLxr Pro is a collection of services offered by Wind River to
+eLxr users. The eLxr Pro command line tool is used to attach
+a system to an eLxr Pro contract to then activate entitlements
+from Wind River. The available commands are described in more
+detail below.
+
+
+.SH OPTIONS
+.TP
+.BR "-h, --help"
+Show help for elxr-pro or for the specified elxr-pro command.
+
+.TP
+.BR "--debug"
+Redirect all the debugging logs to the console.
+
+.TP
+.BR "--version"
+Show the eLxr Pro Client version and exit.
+
+
+.SH COMMANDS
+.TP
+.BR "join" " [-h] [--pro-only] [--attach-config ATTACH_CONFIG] [--format {cli,json}] [token]"
+Attach this machine to an eLxr Pro subscription with a token obtained from:
+https://accounts.elxrpro.net/dashboard
+
+When running this command without a token, it will generate a short code
+and prompt you to attach the machine to your eLxr Pro account using token.
+
+The "attach-config" option can be used to provide a file with the token
+and optionally. The format of this file should be like as follows:
+ # cat ~/my-attach-config
+ token: abcdefg1234567890
+
+The exit code will be:
+
+    * 0: on successful attach
+    * 1: in case of any error while trying to attach
+    * 2: if the machine is already attached
+
+.TP
+.BR "config" " [-h] {show,set,unset} ..."
+Manage eLxr Pro Client configuration on this machine.
+
+All supported keys for config command as follows:
+ global_apt_http_proxy      # Apt global proxy for all resources
+ global_apt_https_proxy     # Apt global proxy for all resources
+ ea_apt_http_proxy          # Limited to access elxr-pro resources
+ ea_apt_https_proxy         # Limited to access elxr-pro resources
+
+.TP
+.BR "    show" " [-h] [key]"
+Show customizable configuration settings.
+
+.TP
+.BR "    set" " [-h] key_value_pair"
+Set and apply eLxr Pro configuration settings.
+
+.TP
+.BR "    unset" " [-h] key"
+Unset an eLxr Pro configuration setting, restoring the default value.
+
+.TP
+.BR "leave" " [-h] [--assume-yes] [--format {cli,json}]"
+Detach this machine from an eLxr Pro subscription.
+
+.TP
+.BR "test" " [-h] [--assume-yes] [token]"
+Validate the connection to the API server.
+
+.TP
+.BR "help" " [-h] [--format {tabular,json,yaml}] [--all] [service]"
+Provide detailed information about eLxr Pro services.
+
+.SH CONFIGURATION SETTINGS
+.TP
+.BR "contract_url"
+Sometimes We need to edit the 'contract_url' in /etc/elxr-advantage/eaclient.conf
+for development debugging.
+
+.TP
+.BR "log_level"
+If set, elxr-pro will configure the log level to the sepcified value during the
+execution process.
+
+.TP
+.BR "global_apt_http_proxy"
+If set, elxr-pro will configure apt to use the specified http proxy by writing
+a apt config file to /etc/apt/apt.conf.d/90elxr-advantage-aptproxy. Set this
+if you prefer a global proxy for all resources, not just the ones from
+ \fIpackages.elxr.pro\fB
+
+.TP
+.BR "global_apt_https_proxy"
+If set, elxr-pro will configure apt to use the specified http proxy by writing
+a apt config file to /etc/apt/apt.conf.d/90elxr-advantage-aptproxy. Set this
+if you prefer a global proxy for all resources, not just the ones from
+ \fIpackages.elxr.pro\fB
+
+.TP
+.BR "ea_apt_http_proxy"
+If set, elxr-pro will configure apt to use the specified http proxy by writing
+a apt config file to /etc/apt/apt.conf.d/90elxr-advantage-aptproxy. This proxy
+is limited to accessing resources from \fIpackages.elxr.pro\fB
+
+.TP
+.BR "ea_apt_https_proxy"
+If set, elxr-pro will configure apt to use the specified http proxy by writing
+a apt config file to /etc/apt/apt.conf.d/90elxr-advantage-aptproxy. This proxy
+is limited to accessing resources from \fIpackages.elxr.pro\fB
+
+.P
+If needed, authentication to the proxy server can be performed by setting
+username and password in the URL itself, as in:
+.nf
+.fam C
+  http://<username>:<password>@<fqdn>:<port>
+.fam T
+.fi
+
+.SH REPORTING BUGS
+Please report bugs to login to the following gitlab page:
+https://gitlab.com/elxrpro/subscription_services/elxr-pro/-/issues/new
+
+.SH COPYRIGHT
+Copyright (c) 2025 Wind River Systems, Inc.
