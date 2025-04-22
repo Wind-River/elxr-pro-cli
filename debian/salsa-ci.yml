@@ -7,6 +7,20 @@ variables:
   SALSA_CI_DISABLE_VERSION_BUMP: 1
   SALSA_CI_DISABLE_BUILD_PACKAGE_ARM64: 1
 
+run unittests:
+  stage: test
+  image: python:slim
+  script:
+    - apt update
+    - apt install eatmydata -y
+    - eatmydata apt install python3-apt python3-mock python3-pytest python3-pytest-cov python3-yaml -y
+    - pytest --cov=eaclient
+  tags:
+    - amd64
+  needs:
+    - job: build
+      artifacts: true
+
 extract-source:
   extends: .provisioning-extract-source
   tags:
