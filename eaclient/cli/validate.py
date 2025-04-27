@@ -37,12 +37,12 @@ def action_validate(args, *, cfg, **kwargs) -> int:
 
     @return: 0 on success, 1 otherwise
     """
-    ret = _validate(cfg, assume_yes=args.assume_yes, token=args.token)
+    ret = _validate(cfg, token=args.token)
     event.process_events()
     return ret
 
 
-def _validate(cfg: config.EAConfig, assume_yes: bool, token=None) -> int:
+def _validate(cfg: config.EAConfig, token=None) -> int:
     """Validate the cnonection from the machine to the API server,
 
     :param assume_yes: Assume a yes answer to any prompts requested.
@@ -79,11 +79,6 @@ test_command = ProCommand(
             arguments=[
                 ProArgument(
                     "token", help=messages.CLI_ATTACH_TOKEN, nargs="?"
-                ),
-                ProArgument(
-                    "--assume-yes",
-                    help=messages.CLI_ASSUME_YES.format(command="test"),
-                    action="store_true",
                 ),
             ]
         )
