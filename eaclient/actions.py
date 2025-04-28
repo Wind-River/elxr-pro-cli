@@ -46,6 +46,7 @@ def action_to_request(
     cmd: str,
     token: str = None,
     pro_only_enable: bool = False,
+    force: bool = False,
     silent: bool = False,
 ) -> None:
     """
@@ -63,6 +64,14 @@ def action_to_request(
             machine_id = machine_token_file.machine_token.get("machineId")
         else:
             raise exceptions.UnattachedError()
+
+        if force:
+            remove_apt_config(machine_token_file)
+            machine_token_file.delete()
+            state_files.delete_state_files()
+            apt.restore_elxr_and_debian_repo()
+
+            return
 
     secret_manager.secrets.add_secret(token)
     contract_client = contract.EAContractClient(cfg)
@@ -100,14 +109,7 @@ def action_to_request(
     elif cmd == 'leave':
         resp_msg = response_json.get("message")
         if resp_msg == "Leave successful":
-            repo_file_tmpl = "/etc/apt/sources.list.d/{name}.sources"
-            entitlements = machine_token_file.entitlements()
-            for entitlement_name, ent_value in entitlements.items():
-                repo_url = ent_value.get("entitlement").get("uri")
-                repo_file = repo_file_tmpl.format(name=entitlement_name)
-                system.ensure_file_absent(repo_file)
-                apt.remove_repo_from_apt_auth_file(repo_url)
-
+            remove_apt_config(machine_token_file)
             machine_token_file.delete()
             state_files.delete_state_files()
             apt.restore_elxr_and_debian_repo()
@@ -121,6 +123,19 @@ def action_to_request(
                 )
     else:
         raise exceptions.NonSupportCommandError()
+
+
+def remove_apt_config(machine_token_file):
+    """
+    Cleanup the apt setting for eLxr Pro entitlements
+    """
+    repo_file_tmpl = "/etc/apt/sources.list.d/{name}.sources"
+    entitlements = machine_token_file.entitlements()
+    for entitlement_name, ent_value in entitlements.items():
+        repo_url = ent_value.get("entitlement").get("uri")
+        repo_file = repo_file_tmpl.format(name=entitlement_name)
+        system.ensure_file_absent(repo_file)
+        apt.remove_repo_from_apt_auth_file(repo_url)
 
 
 def enable_entitlements(

@@ -251,6 +251,11 @@ CLI_PRO_ONLY = t.gettext(
 )
 
 
+CLI_FORCE_TO_LEAVE = t.gettext(
+    "force to leave from an eLxr Pro subscription."
+)
+
+
 ###############################################################################
 #                              NAMED MESSAGES                                 #
 ###############################################################################

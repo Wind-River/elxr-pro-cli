@@ -40,12 +40,12 @@ def action_detach(args, *, cfg, **kwargs) -> int:
 
     @return: 0 on success, 1 otherwise
     """
-    ret = _detach(cfg, assume_yes=args.assume_yes)
+    ret = _detach(cfg, assume_yes=args.assume_yes, force=args.force)
     event.process_events()
     return ret
 
 
-def _detach(cfg: config.EAConfig, assume_yes: bool) -> int:
+def _detach(cfg: config.EAConfig, assume_yes: bool, force: False) -> int:
     """Detach the machine from the active eLxr Pro subscription,
 
     :param cfg: a ``config.EAConfig`` instance
@@ -60,7 +60,7 @@ def _detach(cfg: config.EAConfig, assume_yes: bool) -> int:
         return 1
 
     try:
-        actions.action_to_request(cfg, cmd="leave")
+        actions.action_to_request(cfg, cmd="leave", force=force)
     except exceptions.ConnectivityError as exc:
         LOG.exception(
             "Failed to access URL: %s", exc.url, exc_info=exc
@@ -89,6 +89,11 @@ leave_command = ProCommand(
                 ProArgument(
                     "--assume-yes",
                     help=messages.CLI_ASSUME_YES.format(command="leave"),
+                    action="store_true",
+                ),
+                ProArgument(
+                    "--force",
+                    help=messages.CLI_FORCE_TO_LEAVE,
                     action="store_true",
                 ),
                 ProArgument(
