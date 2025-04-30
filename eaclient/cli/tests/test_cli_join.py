@@ -241,7 +241,7 @@ class TestActionAttach:
             "eaclient.data_types.AttachActionsConfigFile.from_dict"
         ) as mock_from_dict:
             mock_from_dict.return_value = AttachActionsConfigFile(
-                token="config-token", enable_services=None
+                token="config-token"
             )
 
             ret = join_command.action(args, cfg=cfg)

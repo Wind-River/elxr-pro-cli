@@ -372,5 +372,5 @@ class AttachActionsConfigFile(DataObject):
         Field("token", StringDataValue),
     ]
 
-    def __init__(self, *, token: str, enable_services: Optional[List[str]]):
+    def __init__(self, *, token: str):
         self.token = token
