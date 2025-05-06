@@ -57,10 +57,10 @@ APT_PROXY_CONFIG_HEADER = """\
 APT_CONFIG_GLOBAL_PROXY_HTTP = """Acquire::http::Proxy "{proxy_url}";\n"""
 APT_CONFIG_GLOBAL_PROXY_HTTPS = """Acquire::https::Proxy "{proxy_url}";\n"""
 APT_CONFIG_EA_PROXY_HTTP = (
-    """Acquire::http::Proxy::mirror.elxr.dev "{proxy_url}";\n"""
+    """Acquire::http::Proxy::packages.elxr.pro "{proxy_url}";\n"""
 )
 APT_CONFIG_EA_PROXY_HTTPS = (
-    """Acquire::https::Proxy::mirror.elxr.dev "{proxy_url}";\n"""
+    """Acquire::https::Proxy::packages.elxr.pro "{proxy_url}";\n"""
 )
 APT_KEYS_DIR = "/etc/apt/trusted.gpg.d/"
 KEYRINGS_DIR = "/usr/share/keyrings"
