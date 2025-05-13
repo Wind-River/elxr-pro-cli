@@ -86,7 +86,7 @@ class EAContractClient(serviceclient.EAServiceClient):
             raise exceptions.NonSupportCommandError()
 
         if contract_token:
-            data["productToken"] = contract_token
+            data["token"] = contract_token
 
         response = self.request_url(
             req_url, data=data, headers=headers

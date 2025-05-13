@@ -171,7 +171,7 @@ class FakeMachineToken(MachineTokenFile):
 
         return {
             "machineId": "test_machine_id",
-            "productToken": "not-full",
+            "token": "not-full",
             "machineInfo": {
                 "distribution": "elxr12",
                 "kernel": "6.1.123-1",

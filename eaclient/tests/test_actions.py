@@ -42,7 +42,7 @@ class TestActionToRequest:
         )
 
         response_json = {
-            "productToken": product_token,
+            "token": product_token,
             "resources": {
                 "test-entitlement": {
                     "type": "test-type",
@@ -109,7 +109,7 @@ class TestActionToRequest:
         m_get_machine_id.return_value = machine_id
         machine_token_file.is_attached = True
         machine_token_file.machine_token = {
-            "productToken": "test-product-token",
+            "token": "test-product-token",
             "machineId": machine_id,
         }
         entitlements = {

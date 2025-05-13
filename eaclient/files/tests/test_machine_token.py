@@ -33,7 +33,7 @@ class TestEntitlements:
                 },
             ],
             "machineId": "abcd",
-            "productToken": "1234",
+            "token": "1234",
         }
         expected = {
             "entitlement1": {

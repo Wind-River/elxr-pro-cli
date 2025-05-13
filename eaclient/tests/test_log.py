@@ -75,9 +75,9 @@ class TestLogger:
                 "'machineInfo':{'expiry'}}",
             ),
             (
-                "data: {'productToken': 'SEKRET', "
+                "data: {'token': 'SEKRET', "
                 "'entitlement': {'affordances':'blah blah' }}",
-                "data: {'productToken': '<REDACTED>', "
+                "data: {'token': '<REDACTED>', "
                 "'entitlement': {'affordances':'blah blah' }}",
             ),
             (

@@ -59,7 +59,7 @@ class PublicMachineTokenData(DataObject):
     fields = [
         Field("resources", data_list(Resource), False),
         Field("machineId", StringDataValue, False),
-        Field("productToken", StringDataValue, False),
+        Field("token", StringDataValue, False),
         Field("message", StringDataValue, False),
     ]
 
@@ -67,10 +67,10 @@ class PublicMachineTokenData(DataObject):
         self,
         resources: Optional[List[Resource]],
         machineId: Optional[str],
-        productToken: Optional[str],
+        token: Optional[str],
         message: Optional[str],
     ):
         self.resources = resources
         self.machineId = machineId
-        self.productToken = productToken
+        self.token = token
         self.message = message

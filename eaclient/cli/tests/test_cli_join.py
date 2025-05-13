@@ -34,7 +34,7 @@ from eaclient.testing.fakes import FakeFile
 
 BASIC_MACHINE_TOKEN = {
     "machineId": "test_machine_id",
-    "productToken": "non-empty-token",
+    "token": "non-empty-token",
     "machineInfo": {
         "distribution": "elxr12",
         "kernel": "6.1.123",

@@ -60,7 +60,7 @@ def action_to_request(
     machine_token_file = machine_token.get_machine_token_file(cfg)
     if cmd == 'leave':
         if machine_token_file.is_attached:
-            token = machine_token_file.machine_token.get("productToken")
+            token = machine_token_file.machine_token.get("token")
             machine_id = machine_token_file.machine_token.get("machineId")
         else:
             raise exceptions.UnattachedError()
@@ -83,7 +83,7 @@ def action_to_request(
         contract_token=token,
         machine_id=machine_id
     )
-    product_token = response_json.get("productToken", "")
+    product_token = response_json.get("token", "")
     secret_manager.secrets.add_secret(product_token)
 
     if cmd == 'join':
