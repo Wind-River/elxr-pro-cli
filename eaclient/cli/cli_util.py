@@ -108,7 +108,7 @@ def assert_not_attached(f):
         is_attached = machine_token_file.is_attached
         if is_attached:
             raise exceptions.AlreadyAttachedError(
-                account_name = machine_token_file.contract_id
+                account_name = machine_token_file.get_token
             )
         return f(args, cfg=cfg, **kwargs)
     return new_f

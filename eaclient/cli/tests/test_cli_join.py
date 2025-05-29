@@ -100,12 +100,12 @@ class TestActionAttach:
                 )
 
         msg = messages.E_ALREADY_ATTACHED.format(
-            account_name="test_machine_id"
+            account_name="not-full"
         )
         expected = {
             "errors": [
                 {
-                    "additional_info": {"account_name": "test_machine_id"},
+                    "additional_info": {"account_name": "not-full"},
                     "message": msg.msg,
                     "message_code": msg.name,
                     "service": None,

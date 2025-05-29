@@ -148,6 +148,12 @@ class MachineTokenFile:
             return self.machine_token.get("machineId", "")
         return None
 
+    @property
+    def get_token(self):
+        if self.machine_token:
+            return self.machine_token.get("token", "")
+        return None
+
 
 def get_machine_token_file(cfg=None) -> MachineTokenFile:
     from eaclient.config import EAConfig
