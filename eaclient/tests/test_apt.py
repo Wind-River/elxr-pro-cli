@@ -301,7 +301,7 @@ class TestAddAuthAptRepo:
             repo_url="http://fakerepo",
             credentials="mycreds",
             suites=(series,),
-            components="main",
+            components=['main'],
             keyring_file="keyring",
         )
 
@@ -366,7 +366,7 @@ class TestAddAuthAptRepo:
             suites=(
                 "{}-one".format(series),
             ),
-            components="main",
+            components=['main'],
             keyring_file="keyring",
         )
 
@@ -427,7 +427,7 @@ class TestAddAuthAptRepo:
             suites=(
                 "{}".format(series),
             ),
-            components="main",
+            components=['main'],
             keyring_file="keyring",
         )
 
@@ -482,7 +482,7 @@ class TestAddAuthAptRepo:
             repo_url="http://fakerepo",
             credentials="user:password",
             suites=("aria-pro",),
-            components="main",
+            components=['main'],
             keyring_file="keyring",
         )
 
@@ -520,7 +520,7 @@ class TestAddAuthAptRepo:
             repo_url="http://fakerepo/",
             credentials="SOMELONGTOKEN",
             suites=("aria-pro",),
-            components="main",
+            components=['main'],
             keyring_file="keyring",
         )
 

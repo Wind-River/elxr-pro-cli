@@ -310,7 +310,7 @@ def _get_sources_file_content(
     content = DEB822_REPO_FILE_CONTENT.format(
         url=repo_url,
         suites=" ".join(appliable_suites),
-        components=components,
+        components=" ".join(components),
         keyrings_dir=KEYRINGS_DIR,
         keyring_file=keyring_file,
         deb_src=deb_src,
