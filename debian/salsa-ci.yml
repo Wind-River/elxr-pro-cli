@@ -1,57 +1,9 @@
 ---
 include:
-  - https://gitlab.com/elxr/ci/pipeline/raw/elxr/salsa-ci.yml
+  - project: elxrpro/CI/pipeline
+    file: recipes/elxrpro.yml
+    ref: elxrpro
 
 variables:
-  RELEASE: 'bookworm'
-  SALSA_CI_DISABLE_VERSION_BUMP: 1
   SALSA_CI_DISABLE_BUILD_PACKAGE_ARM64: 1
-
-run unittests:
-  stage: test
-  image: python:slim
-  script:
-    - apt update
-    - apt install eatmydata -y
-    - eatmydata apt install python3-apt python3-mock python3-pytest python3-pytest-cov python3-yaml -y
-    - pytest --cov=eaclient
-  tags:
-    - amd64
-  needs:
-    - job: build
-      artifacts: true
-
-extract-source:
-  extends: .provisioning-extract-source
-  tags:
-    - amd64
-
-build:
-  extends: .build-package
-  tags:
-    - amd64
-
-build source:
-  extends: .build-source-only
-  tags:
-    - amd64
-
-test-build-any:
-  extends: .test-build-package-any
-  tags:
-    - amd64
-
-test-build-all:
-  extends: .test-build-package-all
-  tags:
-    - amd64
-
-lintian:
-  extends: .test-lintian
-  tags:
-    - amd64
-
-blhc:
-  extends: .test-blhc
-  tags:
-    - amd64
+  SALSA_CI_DISABLE_REPROTEST: 1
