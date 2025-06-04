@@ -18,4 +18,4 @@ URLs that are actually contacted by the elxr-pro should be defined elsewhere.
 """
 
 PRO_HOME_PAGE = "https://elxr.pro/"
-PRO_DASHBOARD = "https://elxr.pro/dashboard"
+PRO_DASHBOARD = "https://accounts.elxr.pro/dashboard"

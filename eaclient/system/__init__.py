@@ -267,6 +267,22 @@ def get_release_info() -> ReleaseInfo:
 
 
 @lru_cache(maxsize=None)
+def is_desktop() -> bool:
+    """Checks to see if this code running in desktop env"""
+    if os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY"):
+        return True
+    try:
+        result, _ = subp(["tasksel", "--list-tasks"])
+        for line in result.splitlines():
+            parts = line.strip().split(None, 2)
+            if len(parts) >= 2 and parts[0] == "i" and "desktop" in parts[1]:
+                return True
+    except exceptions.ProcessExecutionError:
+        pass
+    return False
+
+
+@lru_cache(maxsize=None)
 def is_container(run_path: str = "/run") -> bool:
     """Checks to see if this code running in a container of some sort"""
 

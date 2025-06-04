@@ -113,9 +113,10 @@ class EAContractClient(serviceclient.EAServiceClient):
             "kernel": system.get_kernel_info().uname_release,
             "series": system.get_release_info().series,
             "architecture": system.get_dpkg_arch(),
-            "desktop": "true",
+            "desktop": system.is_desktop(),
             "virt": system.get_virt_type(),
             "clientVersion": version.get_version(),
             "cpu_type": cpu_type.get_cpu_type(),
+            "variant_id": system.get_release_info().variant,
         }
         return machine_info
