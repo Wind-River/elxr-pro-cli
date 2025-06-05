@@ -216,7 +216,8 @@ CLI_HELP_HEADER_OTHER = t.gettext("Other commands")
 CLI_FLAGS = t.gettext("Flags")
 CLI_AVAILABLE_COMMANDS = t.gettext("Available Commands")
 CLI_FORMAT_DESC = t.gettext(
-    "output in the specified format (default: {default})"
+    "output in the specified format (default: {default}), "
+    "but json format must require --assume-yes flag."
 )
 CLI_ASSUME_YES = t.gettext(
     "do not prompt for confirmation before performing the {command}"
