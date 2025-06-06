@@ -150,7 +150,7 @@ DETACH_SUCCESS = (
 
 CLI_MAGIC_ATTACH_INIT = t.gettext("Initiating join operation...")
 
-VALIDATE_SUCCESS = t.gettext("Connect to API server succussfully.")
+VALIDATE_SUCCESS = t.gettext("Connection to API server successful.")
 
 
 ###############################################################################
