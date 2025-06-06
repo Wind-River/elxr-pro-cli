@@ -7,3 +7,6 @@ include:
 variables:
   SALSA_CI_DISABLE_BUILD_PACKAGE_ARM64: 1
   SALSA_CI_DISABLE_REPROTEST: 1
+  # As elxr-pro application is the begining for the pro entitlement,
+  # so no need to be published into the aptly repo.
+  CI_COMMIT_REF_PROTECTED: 0
