@@ -86,8 +86,9 @@ PROMPT_MOTD_JOIN = (
     + t.gettext(
         """\
  motd from server
-To take full advantage of eLxr Pro subscription, here is how you looking for
-information: {homepage_url}"""
+For more information about your eLxr Pro subscription,
+go to {homepage_url}
+"""
     )
 )
 

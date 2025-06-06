@@ -49,7 +49,7 @@ DEFAULT_CONFIG_FILE = os.path.join(EAC_ETC_PATH, CONFIG_FILE)
 DEFAULT_LOG_PREFIX = os.path.join(DEFAULT_LOG_DIR, DEFAULT_LOG_FILE_BASE_NAME)
 ESM_APT_ROOTDIR = os.path.join(DEFAULT_DATA_DIR, PRIVATE_ELXR_CACHE_SUBDIR)
 
-HOMEPAGE_URL = "https://elxr.pro/"
+HOMEPAGE_URL = "https://www.windriver.com/products/elxr-pro"
 BASE_CONTRACT_URL = "https://api.elxr.pro"
 
 PRINT_WRAP_WIDTH = 80
