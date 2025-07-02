@@ -149,6 +149,16 @@ DETACH_SUCCESS = (
     + t.gettext(" This machine is now detached.")
 )
 
+FORCE_DETACH_PROMPT = (
+    "\n"
+    + BLUE_INFO
+    + t.gettext(
+        " Force to leave, only remove local elxr-pro data."
+        " You can try join again and leave to detach machine."
+    )
+)
+
+
 CLI_MAGIC_ATTACH_INIT = t.gettext("Initiating join operation...")
 
 VALIDATE_SUCCESS = t.gettext("Connection to API server successful.")
@@ -254,7 +264,7 @@ CLI_PRO_ONLY = t.gettext(
 
 
 CLI_FORCE_TO_LEAVE = t.gettext(
-    "force to leave from an eLxr Pro subscription."
+    "force to leave from an eLxr Pro subscription.(Just remove local data)"
 )
 
 

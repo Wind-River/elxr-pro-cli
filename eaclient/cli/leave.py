@@ -73,7 +73,10 @@ def _detach(cfg: config.EAConfig, assume_yes: bool, force: False) -> int:
         event.info(info_msg=msg.msg, file_type=sys.stderr)
         sys.exit(1)
 
-    event.info(messages.DETACH_SUCCESS)
+    if force:
+        event.info(messages.FORCE_DETACH_PROMPT)
+    else:
+        event.info(messages.DETACH_SUCCESS)
     return 0
 
 
