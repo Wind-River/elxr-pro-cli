@@ -62,13 +62,20 @@ def _detach(cfg: config.EAConfig, assume_yes: bool, force: False) -> int:
     try:
         actions.action_to_request(cfg, cmd="leave", force=force)
     except exceptions.ConnectivityError as exc:
-        LOG.exception(
-            "Failed to access URL: %s", exc.url, exc_info=exc
-        )
-        msg = messages.E_CONNECTIVITY_ERROR.format(
-            url=exc.url,
-            cause_error=exc.cause_error,
-        )
+        if "CERTIFICATE_VERIFY_FAILED" in str(exc):
+            if "unable to get local issuer certificate" in str(exc):
+                tmpl = messages.E_VERIFICATION_ERROR_ISSUER_CERTIFICATES
+            elif "certificate is not yet valid" in str(exc):
+                tmpl = messages.E_VERIFICATION_ERROR_CA_NOT_VALID
+            msg = tmpl.format(url=exc.url)
+        else:
+            LOG.exception(
+                "Failed to access URL: %s", exc.url, exc_info=exc
+            )
+            msg = messages.E_CONNECTIVITY_ERROR.format(
+                url=exc.url,
+                cause_error=exc.cause_error,
+            )
         event.error(error_msg=msg.msg, error_code=msg.name)
         event.info(info_msg=msg.msg, file_type=sys.stderr)
         sys.exit(1)

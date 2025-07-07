@@ -673,3 +673,21 @@ E_VARIANT_UNEXPECTED_ERROR = FormattedNamedMessage(
     "variant-unexpected",
     t.gettext("{variant} is unexpected, just 'server' and 'edge' are valid"),
 )
+
+E_VERIFICATION_ERROR_ISSUER_CERTIFICATES = FormattedNamedMessage(
+    "ssl-verification-error-ca-issuer-certificate",
+    t.gettext(
+        """\
+Failed to access URL: {url}
+Please check local issuer CA or request help from your IT department."""
+    ),
+)
+
+E_VERIFICATION_ERROR_CA_NOT_VALID = FormattedNamedMessage(
+    "ssl-verification-error-ca-is-not-valid",
+    t.gettext(
+        """\
+Failed to access URL: {url}
+Certificate is not yet valid, please calibrate the local target time."""
+    ),
+)
