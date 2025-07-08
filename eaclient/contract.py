@@ -93,8 +93,23 @@ class EAContractClient(serviceclient.EAServiceClient):
         )
 
         if response.code != 200:
-            if response.code == 401 and test_without_token:
-                pass
+            if response.code == 401:
+                if test_without_token:
+                    pass
+                else:
+                    detail = response.json_dict.get("detail")
+                    if detail == "Product status is EXPIRED.":
+                        raise exceptions.AttachExpiredToken()
+                    else:
+                        raise exceptions.AttachInvalidTokenError()
+            elif response.code == 403:
+                raise exceptions.AttachForbiddenExpired()
+            elif response.code == 404:
+                raise exceptions.ResourceNotFound()
+            elif response.code == 500:
+                raise exceptions.InternalServerError()
+            elif response.code == 503:
+                raise exceptions.ServiceUnavailable()
             else:
                 raise exceptions.ContractAPIError(
                     url=req_url,

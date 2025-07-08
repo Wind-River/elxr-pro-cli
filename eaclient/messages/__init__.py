@@ -463,7 +463,7 @@ E_TOKEN_FORBIDDEN_EXPIRED = FormattedNamedMessage(
     "token-forbidden-expired",
     t.gettext(
         """\
-Contract "{{contract_id}}" expired on {{date}}
+Expired token.
 Visit {url} to manage contract tokens."""
     ).format(url=urls.PRO_DASHBOARD),
 )
@@ -690,4 +690,24 @@ E_VERIFICATION_ERROR_CA_NOT_VALID = FormattedNamedMessage(
 Failed to access URL: {url}
 Certificate is not yet valid, please calibrate the local target time."""
     ),
+)
+
+E_TRY_AGAIN_PROMPT = FormattedNamedMessage(
+    "try-again-later",
+    t.gettext(" Please try again later, or contract your system vendor.")
+)
+
+E_RESOURCE_NOT_FOUND = FormattedNamedMessage(
+    "resource-not-found",
+    t.gettext("Resource Not Found.") + E_TRY_AGAIN_PROMPT.tmpl_msg,
+)
+
+E_INTERNAL_SERVER_ERROR = FormattedNamedMessage(
+    "internal-server-error",
+    t.gettext("Internal server error.") + E_TRY_AGAIN_PROMPT.tmpl_msg,
+)
+
+E_SERVICE_UNAVAILABLE = FormattedNamedMessage(
+    "service-unavailable",
+    t.gettext("Service unavailable.") + E_TRY_AGAIN_PROMPT.tmpl_msg,
 )

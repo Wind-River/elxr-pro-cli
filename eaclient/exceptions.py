@@ -173,6 +173,18 @@ class ContractAPIError(ExternalAPIError):
     pass
 
 
+class ResourceNotFound(ELxrProError):
+    _formatted_msg = messages.E_RESOURCE_NOT_FOUND
+
+
+class InternalServerError(ELxrProError):
+    _formatted_msg = messages.E_INTERNAL_SERVER_ERROR
+
+
+class ServiceUnavaiable(ELxrProError):
+    _formatted_msg = messages.E_SERVICE_UNAVAILABLE
+
+
 class PycurlCACertificatesError(ELxrProError):
     _msg = messages.E_PYCURL_CA_CERTIFICATES
 
