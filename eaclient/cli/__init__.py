@@ -23,6 +23,7 @@ from eaclient import (
     defaults,
     log,
     messages,
+    system,
     util,
     version
 )
@@ -92,6 +93,13 @@ def get_parser():
         command.register(subparsers)
 
     return parser
+
+
+def warn_about_non_elxr_distro():
+    distro = system.get_release_info().distribution
+    if distro != "eLxr":
+        event.info(messages.NON_ELXR_DISTRO.format(distro=distro))
+        sys.exit(1)
 
 
 def set_event_mode(cmd_args):
@@ -197,6 +205,8 @@ def main(sys_argv=None):
     set_event_mode(args)
 
     LOG.debug("Executed with sys.argv: %r" % sys_argv)
+
+    warn_about_non_elxr_distro()
 
     cfg.warn_about_invalid_keys()
 

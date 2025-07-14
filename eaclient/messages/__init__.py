@@ -92,6 +92,17 @@ go to {homepage_url}
     )
 )
 
+NON_ELXR_DISTRO = (
+    "\n"
+    + YELLOW_WARN
+    + t.gettext(
+        """\
+Only eLxr OS is supported, distro {distro} is NOT available.
+"""
+    )
+)
+
+
 ###############################################################################
 #                      GENERIC SYSTEM OPERATIONS                              #
 ###############################################################################

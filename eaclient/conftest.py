@@ -219,3 +219,11 @@ def event():
     event.reset()
 
     return event
+
+
+@pytest.fixture(autouse=True)
+def disable_warn_about_non_elxr(monkeypatch):
+    monkeypatch.setattr(
+        "eaclient.cli.warn_about_non_elxr_distro",
+        lambda: None
+    )
