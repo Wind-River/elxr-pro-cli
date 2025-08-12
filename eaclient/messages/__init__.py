@@ -470,6 +470,15 @@ E_EMPTY_TOKEN = NamedMessage(
     t.gettext("Empty token. See {url}").format(url=urls.PRO_DASHBOARD),
 )
 
+E_TOKEN_FORBIDDEN_FULL = FormattedNamedMessage(
+    "token-forbidden-full",
+    t.gettext(
+        """\
+Product is full.
+Visit {url} to manage contract tokens."""
+    ).format(url=urls.PRO_DASHBOARD),
+)
+
 E_TOKEN_FORBIDDEN_EXPIRED = FormattedNamedMessage(
     "token-forbidden-expired",
     t.gettext(
@@ -486,6 +495,11 @@ E_TOKEN_FORBIDDEN_NOT_YET = FormattedNamedMessage(
 Contract "{{contract_id}}" is not effective until {{date}}
 Visit {url} to manage contract tokens."""
     ).format(url=urls.PRO_DASHBOARD),
+)
+
+E_ATTACH_FORBIDDEN_FULL = FormattedNamedMessage(
+    "attach-forbidden-full",
+    t.gettext("Attach denied:\n") + E_TOKEN_FORBIDDEN_FULL.tmpl_msg,
 )
 
 E_ATTACH_FORBIDDEN_EXPIRED = FormattedNamedMessage(

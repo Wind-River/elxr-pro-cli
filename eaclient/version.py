@@ -16,7 +16,7 @@
 Client version related functions
 """
 
-__VERSION__ = "1.0.2"
+__VERSION__ = "1.0.3"
 
 
 def get_version() -> str:

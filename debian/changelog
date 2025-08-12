@@ -1,3 +1,9 @@
+elxr-pro (1.0.3~elxr12) unstable; urgency=medium
+
+  * Output the correct message when product is full for the token.
+
+ -- Zhixiong Chi <zhixiong.chi@windriver.com>  Tue, 12 Aug 2025 16:02:11 +0800
+
 elxr-pro (1.0.2~elxr12) unstable; urgency=medium
 
   * Only eLxr is supported and add the distro checking.

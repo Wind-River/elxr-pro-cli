@@ -92,18 +92,20 @@ class EAContractClient(serviceclient.EAServiceClient):
             req_url, data=data, headers=headers
         )
 
+        detail = response.json_dict.get("detail")
         if response.code != 200:
             if response.code == 401:
                 if test_without_token:
                     pass
                 else:
-                    detail = response.json_dict.get("detail")
                     if detail == "Product status is EXPIRED.":
                         raise exceptions.AttachExpiredToken()
                     else:
                         raise exceptions.AttachInvalidTokenError()
             elif response.code == 403:
-                raise exceptions.AttachForbiddenExpired()
+                if detail == "Product is full":
+                    raise exceptions.AttachForbiddenFull()
+                raise exceptions.AttachForbiddenNever()
             elif response.code == 404:
                 raise exceptions.ResourceNotFound()
             elif response.code == 500:

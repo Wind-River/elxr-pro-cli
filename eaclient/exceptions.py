@@ -181,7 +181,7 @@ class InternalServerError(ELxrProError):
     _formatted_msg = messages.E_INTERNAL_SERVER_ERROR
 
 
-class ServiceUnavaiable(ELxrProError):
+class ServiceUnavailable(ELxrProError):
     _formatted_msg = messages.E_SERVICE_UNAVAILABLE
 
 
@@ -238,6 +238,10 @@ class AttachInvalidConfigFileError(ELxrProError):
 
 class AttachInvalidTokenError(ELxrProError):
     _msg = messages.E_ATTACH_INVALID_TOKEN
+
+
+class AttachForbiddenFull(ELxrProError):
+    _formatted_msg = messages.E_ATTACH_FORBIDDEN_FULL
 
 
 class AttachForbiddenExpired(ELxrProError):

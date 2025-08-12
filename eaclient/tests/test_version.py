@@ -23,4 +23,4 @@ class TestGetVersion:
             assert "2.0.0" == get_version()
 
     def test_default_version(self):
-        assert "1.0.2" == get_version()
+        assert "1.0.3" == get_version()
